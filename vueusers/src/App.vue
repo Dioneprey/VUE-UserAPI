@@ -1,10 +1,10 @@
 <template>   
-  <router-view/>
+  <router-view class="routerview"/>
 </template>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -22,5 +22,8 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+.routerview {
+  height: 100vh;
 }
 </style>

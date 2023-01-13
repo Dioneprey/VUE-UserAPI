@@ -1,7 +1,7 @@
 <template>
   <div class="main">    
       <div class="form">
-        <h2>Register</h2>
+        <h2>Sign in</h2>
         <div v-if="error != undefined">
           <div v-show="Show">
             <div class="notification is-danger">
@@ -11,11 +11,7 @@
           </div>
           
           
-        </div>
-          <div class="form-group">
-          <i class="fa-solid fa-user"></i>
-           <input  type="text" placeholder="User" v-model="name"> 
-          </div>
+        </div>          
           <div class="form-group">
           <i class="fa-solid fa-envelope"></i>
            <input  type="text" placeholder="Email" v-model="email"> 
@@ -24,7 +20,7 @@
           <i class="fa-solid fa-lock"></i>
            <input  type="password" placeholder="Password" v-model="password"> 
           </div>           
-      <button class="btn" @click="Register">SIGN UP</button>  
+      <button class="btn" @click="Login">SIGN IN</button>  
       </div>
       
       
@@ -34,26 +30,25 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios' 
 export default {
  
   data(){     
-    return {
-      name: '',
+    return {      
       password: '',
       email: '',
       error: undefined            
     }
   },
   methods: {
-    Register: function(){
-      axios.post("http://localhost:8686/user",{
-          name: this.name,
+    Login: function(){
+      axios.post("http://localhost:8686/login",{
           password: this.password,
           email: this.email
       }).then(res => {
         console.log(res)    
-        this.$router.push({name: 'home'})    
+        localStorage.setItem('token', res.data.token)
+       this.$router.push({name: 'home'})    
       }).catch(err => {        
         var msgErr = err.response.data
         console.log(err)
@@ -110,11 +105,11 @@ export default {
   }
   .main {
     display: flex;
-    background: #1f2029;
+    background: rgb(31,32,41);
     background: linear-gradient(28deg, rgba(31,32,41,1) 14%, rgb(51, 54, 68) 62%);
 
     align-items: center;
-    height: 945px;
+    height: 100vh;
     justify-content: center
   }  
   .form-group {

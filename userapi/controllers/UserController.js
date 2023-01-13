@@ -25,11 +25,8 @@ class UserController {
     }
 
     async create(req,res) {
-        
         var {email, password, name} = req.body
-
-        var resul = validator.validate(email)
-        
+        var resul = validator.validate(email)        
         
         if(resul != true) {
             res.status(400)
@@ -40,14 +37,14 @@ class UserController {
         var emailExists = await User.findEmail(email)
 
         if(emailExists){
-            res.status(406)
-            res.json({err: "Email already taken"})
+            res.status(400)
+            res.json("Email already taken")
             return
         }
 
         await User.new(email,password,name)        
         res.status(200)
-        res.json({status: "OK"})
+        res.json("OK")
     }
 
     async edit(req,res){
@@ -57,12 +54,12 @@ class UserController {
             if(result.status){
                 res.json("OK")
             }else{
-                res.status("406")
-                res.json({Error: "An error occurred on the server"})
+                res.status(406)
+                res.json("An error occurred on the server")
             }
         }else{
-            res.status(406).
-            res.json({Error: "An error occurred on the server"})
+            res.status(406)
+            res.json("An error occurred on the server")
         }
     }
 
@@ -71,7 +68,8 @@ class UserController {
         var result = await User.delete(id)
 
         if(result.status){
-            res.status(200).send("OK")
+            res.status(200)
+            res.json("OK")
         }else{
             res.status(406)
             res.json(result.err)
@@ -128,7 +126,8 @@ class UserController {
             }
 
         }else {
-            res.json({Status: false})
+            res.status(406)
+            res.json("User not found")
         }
     }
 

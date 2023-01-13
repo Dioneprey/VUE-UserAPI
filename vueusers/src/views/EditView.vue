@@ -1,7 +1,7 @@
 <template>
   <div class="main">    
       <div class="form">
-        <h2>Register</h2>
+        <h2>User Update</h2>
         <div v-if="error != undefined">
           <div v-show="Show">
             <div class="notification is-danger">
@@ -19,12 +19,8 @@
           <div class="form-group">
           <i class="fa-solid fa-envelope"></i>
            <input  type="text" placeholder="Email" v-model="email"> 
-          </div>
-          <div class="form-group">
-          <i class="fa-solid fa-lock"></i>
-           <input  type="password" placeholder="Password" v-model="password"> 
-          </div>           
-      <button class="btn" @click="Register">SIGN UP</button>  
+          </div>                  
+      <button class="btn" @click="Update">Update</button>  
       </div>
       
       
@@ -36,24 +32,48 @@
 <script>
 import axios from 'axios'
 export default {
- 
+  created(){
+    var req = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    };
+    axios.get("http://localhost:8686/user/" + this.$route.params.id, req).then(res => {
+      console.log(res)
+
+      this.name = res.data.name
+      this.email = res.data.email
+      this.id = res.data.id
+      
+    }).catch(err => {
+      console.log(err.res)
+      this.$router.push({name: 'users'})  
+    })
+
+  },
   data(){     
     return {
-      name: '',
-      password: '',
+      name: '',      
       email: '',
+      id: -1,
       error: undefined            
     }
   },
   methods: {
-    Register: function(){
-      axios.post("http://localhost:8686/user",{
-          name: this.name,
-          password: this.password,
-          email: this.email
-      }).then(res => {
+    Update: function(){
+      var req = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      };
+
+      axios.put("http://localhost:8686/user",{
+          name: this.name,          
+          email: this.email,
+          id: this.id
+      }, req).then(res => {
         console.log(res)    
-        this.$router.push({name: 'home'})    
+        this.$router.push({name: 'users'})    
       }).catch(err => {        
         var msgErr = err.response.data
         console.log(err)
