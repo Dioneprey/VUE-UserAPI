@@ -53,7 +53,7 @@ export default {
           email: this.email
       }).then(res => {
         console.log(res)    
-        this.$router.push({name: 'home'})    
+        this.$router.push({name: 'users'})    
       }).catch(err => {        
         var msgErr = err.response.data
         console.log(err)

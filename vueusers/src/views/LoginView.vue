@@ -19,17 +19,24 @@
           <div class="form-group">
           <i class="fa-solid fa-lock"></i>
            <input  type="password" placeholder="Password" v-model="password"> 
-          </div>           
-      <button class="btn" @click="Login">SIGN IN</button>  
+          </div>  
+           <div class="btns">
+              <button class="btn" @click="Login">SIGN IN</button>  
+               <div id="buttonDiv"></div> 
+            </div>        
+      
       </div>
-      
-      
+
+
+         
             
     </div>
  
 </template>
 
 <script>
+
+
 import axios from 'axios' 
 export default {
  
@@ -125,6 +132,7 @@ export default {
     border: 1px solid #fff;
     color: #fff;
     margin-top: 30px;;
+    margin-bottom: 30px;
   }
 
   .btn:hover {
@@ -132,5 +140,10 @@ export default {
     color: black;
     transition: 1s ease all;
     cursor: pointer;
+  }
+  .btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

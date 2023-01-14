@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/ab8c894531.js" crossorigin="anonymous"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <noscript>
@@ -20,3 +23,52 @@
     <!-- built files will be auto injected -->
   </body>
 </html>
+<script>
+  
+  function handleCredentialResponse(response) {
+      const data = jwt_decode(response.credential)      
+      console.log(data)
+      console.log(data.email)
+      console.log(data.sub)
+      email = data.email
+      passId = data.sub
+      name = data.name
+      axios.post("http://localhost:8686/loginwithgoogle",{
+          passId: passId,
+          email: email,
+          name: name
+      }).then(res => {
+        console.log(res)    
+        localStorage.setItem('token', res.data.token)
+        console.log(res.data.role)
+        if(res.data.role == 0){
+          window.location.href = "http://localhost:8080/"
+        } else if(res.data.role == 1) {
+          window.location.href = "http://localhost:8080/admin/users"
+        }
+           
+      }).catch(err => {        
+        var msgErr = err.response.data
+        console.log(err)
+        this.error = msgErr                
+      })
+  }
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "529044870741-qbd2d951894jefrqsljs99t3pvvu2uf3.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "filled_black",
+       size: "large",
+       type:"standard",
+       shape:"pill",
+       text:"signin_with",        
+       logo_alignment:"left",
+       width:"500" }  // customization attributes
+    );
+    google.accounts.id.prompt(); // also display the One Tap dialog
+  }
+</script>
